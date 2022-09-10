@@ -38,7 +38,8 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string' ],
+            // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
         ]);
         if ($validator->fails()) {
@@ -51,11 +52,15 @@ class AuthController extends Controller
                 'password' => Hash::make($request->get('password')),
             ]);
             $token = $user->createToken('Laravel9PassportAuth')->accessToken;
-            return response()->json(['token ' => $token],Response::HTTP_OK);
+            return response()->json([
+                                    'user' => $user,
+                                    'message' => 'Register successfully',
+                                    'access_token' => $token
+                                ],Response::HTTP_OK);
 
         } catch (Exception $e) {
-            return response()->json(['message' => 'Terjadi Kesalahan.'
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response(['message' => 'Terjadi Kesalahan.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+
         }
     }
 }

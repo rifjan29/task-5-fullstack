@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\Models\User;
 
 class AuthenticationTest extends TestCase
 {
@@ -28,20 +27,25 @@ class AuthenticationTest extends TestCase
 
     public function testSuccessfulRegistration()
     {
-        $response = $this->json('POST', '/api/v1/register', [
-            'name'  =>  $name = 'Test',
-            'email'  =>  $email = time().'test@example.com',
-            'password'  =>  $password = '123456789',
-        ]);
+        $userData = [
+            "name" => "John Doe",
+            "email" => "doe@example.com",
+            "password" => "demo12345",
+        ];
 
-        //Write the response in laravel.log
-        \Log::info(1, [$response->getContent()]);
-
-        $response->assertStatus(200);
-
-        // Receive our token
-        $this->assertArrayHasKey('access_token',$response->json());
-
+        $this->json('POST', 'api/v1/register', $userData, ['Accept' => 'application/json'])
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                "user" => [
+                    'id',
+                    'name',
+                    'email',
+                    'created_at',
+                    'updated_at',
+                ],
+                "message",
+                "access_token"
+            ]);
     }
 
 
