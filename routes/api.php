@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\ArticleController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use Illuminate\Http\Request;
@@ -33,6 +34,15 @@ Route::prefix('v1')->group(function () {
                 Route::get('category/{id}','show');
                 Route::patch('category/{id}','update');
                 Route::delete('category/{id}','destroy');
+            });
+            // article
+            Route::controller(ArticleController::class)->group(function()
+            {
+                Route::get('article','index');
+                Route::post('article','store');
+                Route::get('article/{id}','show');
+                Route::put('article/{id}','update');
+                Route::delete('article/{id}','destroy');
             });
         });
     });

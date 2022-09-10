@@ -50,12 +50,11 @@ class AuthController extends Controller
                 'email' => $request->get('email'),
                 'password' => Hash::make($request->get('password')),
             ]);
-            $token = $user->createToken('Laravel9PassportAuth')->accesToken;
-            return response()->json(['access_token' => $token],Response::HTTP_OK);
+            $token = $user->createToken('Laravel9PassportAuth')->accessToken;
+            return response()->json(['token ' => $token],Response::HTTP_OK);
 
         } catch (Exception $e) {
-            return response([
-                'message' => 'Terjadi Kesalahan.'
+            return response()->json(['message' => 'Terjadi Kesalahan.'
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
